@@ -28,7 +28,8 @@ app.add_middleware(
 )
 app.include_router(users.router, prefix="/users", tags=["users"])
 app.include_router(trades.router, prefix="/trades", tags=["trades"])
-
+for route in app.routes:
+    print(route.path)
 @app.get("/")
 async def root():
     return {"message":"Trading Api Running"}
