@@ -35,7 +35,7 @@ const AnalyzePage: React.FC<AnalyzePageProps> = ({tickers}) => {
         setLoading(true)
         setResult(null)
         const tickersParam = stocks.splice(1).join(',');
-        const res = await fetch(`http://127.0.0.1:8000/trades/v1/analyze/${stocks[0]}?tickers=${tickersParam}`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/trades/v1/analyze/${stocks[0]}?tickers=${tickersParam}`);
         const data = await res.json();
         console.log(data);
         setLoading(false)

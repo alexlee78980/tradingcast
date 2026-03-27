@@ -46,7 +46,7 @@ const ChartExample = () => {
   }
 
   const onSearch = async() =>{
-     const url = `http://127.0.0.1:8000/trades/v1/get/${valueSearch}?start=${startDate}&end=${endDate}`
+     const url = `${process.env.NEXT_PUBLIC_API_URL}/trades/v1/get/${valueSearch}?start=${startDate}&end=${endDate}`
   try {
     const response = await fetch(url);
     if (!response.ok) {
