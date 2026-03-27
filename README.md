@@ -2,7 +2,7 @@
  
 A full-stack stock analysis platform that visualizes market data, predicts future price movements using machine learning, and helps users make informed buy or sell decisions.
  
-![Home Screen](screenshots/home.gif)
+![Home Screen](screenshots/Home.gif)
  
 ---
  
