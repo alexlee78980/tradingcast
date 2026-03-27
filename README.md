@@ -11,22 +11,22 @@ A full-stack stock analysis platform that visualizes market data, predicts futur
 ### Chart
 Visualize stock price history with technical indicators including Moving Average and RSI to identify market trends.
  
-![Chart Page](screenshots/chart.gif)
+![Chart Page](screenshots/Chart.gif)
  
 ### Analyze
 Analyze historical stock data and predict future price movements using machine learning. Add supporting stocks to improve model training and get detailed performance metrics including accuracy to help inform your buy or sell decisions.
  
-![Analyze Page](screenshots/analyze.gif)
+![Analyze Page](screenshots/Analyze.gif)
  
 ### Download
 Download and export historical stock data to a CSV file for offline analysis and research.
  
-![Download Page](screenshots/download.png)
+![Download Page](screenshots/Download.png)
  
 ### Correlation
 Measure how closely a stock's daily price changes move in sync with others to identify patterns and build a more diversified portfolio.
  
-![Correlation Page](screenshots/correlation.png)
+![Correlation Page](screenshots/Correlation.png)
  
 ---
  
