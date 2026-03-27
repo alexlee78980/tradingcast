@@ -479,6 +479,10 @@ def get_tickers():
 
 
 def get_stock_data(ticker: str, start: str = "2010-01-01", end: str = "2025-01-01"):
+    if not start:
+        start = "2010-01-01"
+    if not end:
+        end = "2025-01-01"
     ticker = ticker.upper()
     os.makedirs("data", exist_ok=True)
     file_path = f"data/{ticker}.csv"
@@ -486,17 +490,38 @@ def get_stock_data(ticker: str, start: str = "2010-01-01", end: str = "2025-01-0
     if os.path.exists(file_path):
         print("data in file")
         data = pd.read_csv(file_path)
+        data["Date"] = pd.to_datetime(data["Date"])
+        data_start = data["Date"].min()
+        data_end = data["Date"].max()
+
+        if data_start > pd.to_datetime(start) or data_end < pd.to_datetime(end):
+            print("file doesn't cover date range, re-downloading...")
+            os.remove(file_path)  
+            data = yf.download(ticker, start=start, end=end)
+
+            if isinstance(data.columns, pd.MultiIndex):
+                data.columns = data.columns.droplevel(1)
+
+            data = data.reset_index()
+            data.to_csv(file_path, index=False)
+            data["Date"] = pd.to_datetime(data["Date"])
     else:
         print("downloading data...")
         data = yf.download(ticker, start=start, end=end)
-        print("download finished")
 
         if isinstance(data.columns, pd.MultiIndex):
             data.columns = data.columns.droplevel(1)
 
         data = data.reset_index()
         data.to_csv(file_path, index=False)
-
+        data["Date"] = pd.to_datetime(data["Date"])
+    print(data)
+    data["Date"] = pd.to_datetime(data["Date"])
+    start = pd.to_datetime(start)
+    end = pd.to_datetime(end)
+    data = data[(data["Date"] >= start) & (data["Date"] <= end)]
+    data = data[(data["Date"] >= pd.to_datetime(start)) & (data["Date"] <= pd.to_datetime(end))]
+    print(data)
     result = data.where(pd.notnull(data), None).to_dict(orient="records")
     getMovingAvg(result, 5)
     getMovingAvg(result, 10)

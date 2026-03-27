@@ -9,10 +9,14 @@ const Download:React.FC = () =>{
     const [value, setValue] = useState("");
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
-    const changeStock = (e) =>{
+    const [error, setError] = useState<sting|null>();
+    const [message, setMessage] = useState<string|null>();
+    const changeStock = (e:any) =>{
         setValue(e.target.value)
     }
     const onDownload = async() =>{
+        setMessage(null)
+        setError(null)
         const today = new Date();
         const tenYearsAgo = new Date();
         tenYearsAgo.setFullYear(today.getFullYear() - 10);
@@ -32,6 +36,12 @@ const Download:React.FC = () =>{
         });
 
         const data = await res.json();
+        if(data.message){
+            setMessage(data.message)
+        }
+        if(data.detail){
+            setError(data.detail)
+        }
         console.log(data);
     }
 
@@ -45,11 +55,13 @@ const Download:React.FC = () =>{
         setEndDate(e.target.value)
     }
 
-    return <div className="flex flex-col justify-center items-center gap-4 ">
+    return <div className="flex flex-col justify-center items-center gap-4 mt-16">
     <SearchBar value={value} onChange={changeStock}/>
       <DateSelection value={startDate} onChange={changeStartDate} />
       <DateSelection value={endDate} onChange={changeEndDate}/>
       <Button onClick={onDownload}>Download</Button>
+      {message && <span>{message}</span>}
+      {error && <span className="text-red-500">{error}</span>}
       </div>
       }
 export default Download

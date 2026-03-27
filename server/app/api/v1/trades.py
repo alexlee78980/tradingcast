@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Query, HTTPException
 import yfinance as yf
 from pydantic import BaseModel
 import os
@@ -31,29 +31,6 @@ async def get_stock(
     return result
 
 
-class StockDownloadProp(BaseModel):
-    ticker:str
-    start:str
-    end: str = None
-@router.post("/download")
-async def download_stock(req: StockDownloadProp):
-    if req.end:
-        data = yf.download(req.ticker, start=req.start, end=req.end)
-    else:
-        data = yf.download(req.ticker, start=req.start)
-    os.makedirs("data", exist_ok=True)
-    if isinstance(data.columns, pd.MultiIndex):
-        data.columns = data.columns.droplevel(1)
-    data = data.reset_index()
-    file_path = f"data/{req.ticker}.csv"
-    data.to_csv(file_path, index=False)
-
-    return {
-        "message": "downloaded",
-        "file": file_path
-    }
-
-
             
 
 class StockDownloadProp(BaseModel):
@@ -67,10 +44,15 @@ async def download_stock(req: StockDownloadProp):
         data = yf.download(req.ticker, start=req.start, end=req.end)
     else:
         data = yf.download(req.ticker, start=req.start)
+    if data.empty:
+        raise HTTPException(status_code=404, detail=f"Ticker '{req.ticker}' not found or no data available.")
+    print("empty:", data.empty)
+    print("shape:", data.shape)
     os.makedirs("data", exist_ok=True)
     if isinstance(data.columns, pd.MultiIndex):
         data.columns = data.columns.droplevel(1)
     data = data.reset_index()
+    # print("dataaA :" + data)
     file_path = f"data/{req.ticker}.csv"
     data.to_csv(file_path, index=False)
 

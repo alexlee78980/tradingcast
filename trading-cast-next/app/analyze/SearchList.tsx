@@ -6,10 +6,12 @@ interface SearchListProps{
 }
 const SearchList:React.FC<SearchListProps> = ({ items, onSelect }) => {
     const [query, setQuery] = useState("")
-
-    const filtered = items.filter(item =>
+    let filtered:string[] = []
+    if (items && items.length > 0){
+     filtered = items.filter(item =>
         item.toLowerCase().includes(query.toLowerCase())
     )
+    }
     const clickedTicker = (item:string) =>{
         setQuery("")
         console.log(`clicked ${item}`)

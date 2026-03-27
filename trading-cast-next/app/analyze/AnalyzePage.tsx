@@ -33,6 +33,7 @@ const AnalyzePage: React.FC<AnalyzePageProps> = ({tickers}) => {
         if (stocks.length === 0) return;
 
         setLoading(true)
+        setResult(null)
         const tickersParam = stocks.splice(1).join(',');
         const res = await fetch(`http://127.0.0.1:8000/trades/v1/analyze/${stocks[0]}?tickers=${tickersParam}`);
         const data = await res.json();
@@ -51,11 +52,11 @@ const AnalyzePage: React.FC<AnalyzePageProps> = ({tickers}) => {
     return <div className="flex mt-20 justify-evenly pl-20" >
         <div className="flex flex-col"><div className="flex-1 flex items-center gap-2">
             <SearchList items={tickers} onSelect={addSelection}/>
-            <Button onClick={addStock}>Add</Button>
+            {/* <Button onClick={addStock}>Add</Button>
             <Button
             
             
-            onClick={addMain}>Add main</Button>
+            onClick={addMain}>Add main</Button> */}
             <Button onClick={trainModel}>Train</Button>
         </div>
                   {stocks[0] && <StockItemMain>{stocks[0]}</StockItemMain>}
@@ -75,7 +76,6 @@ const AnalyzePage: React.FC<AnalyzePageProps> = ({tickers}) => {
             </div>}
             {result && (
   <div className="flex-1 p-6 flex flex-col gap-4">
-    {/* Prediction */}
     <div className="border rounded-md p-4">
       <h2 className="font-bold text-lg mb-2">Prediction for {result.target}</h2>
       <span className={`font-bold text-2xl ${
@@ -87,7 +87,6 @@ const AnalyzePage: React.FC<AnalyzePageProps> = ({tickers}) => {
       </span>
     </div>
 
-    {/* Probabilities */}
     <div className="border rounded-md p-4">
       <h2 className="font-bold mb-2">Probabilities</h2>
       {Object.entries(result.probabilities).map(([label, prob]) => (
@@ -108,13 +107,11 @@ const AnalyzePage: React.FC<AnalyzePageProps> = ({tickers}) => {
       ))}
     </div>
 
-    {/* Accuracy */}
     <div className="border rounded-md p-4">
       <h2 className="font-bold mb-2">Model Accuracy</h2>
       <span className="text-2xl">{(result.accuracy * 100).toFixed(1)}%</span>
     </div>
 
-    {/* Report */}
     <div className="border rounded-md p-4">
       <h2 className="font-bold mb-2">Classification Report</h2>
       <table className="w-full text-sm">
