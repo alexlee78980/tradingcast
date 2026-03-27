@@ -99,6 +99,8 @@ def getADX(data, period=14):
         data[i]["adx"] = dx
 
 def getRSI(data, duration=14):
+    if len(data) == 0:
+        return
     sofarLoss = 0
     sofarGain = 0
     rsi_values = []

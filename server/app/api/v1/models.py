@@ -20,7 +20,7 @@ from .helpers import getADX, getMACD, getMovingAvg, getRSI, getStochastic, add_e
 import os
 import yfinance as yf
 import pandas as pd
-
+import requests as req_session
 optuna.logging.set_verbosity(optuna.logging.WARNING)
 
 PARAMS_FILE = "best_params.json"
@@ -257,15 +257,9 @@ def extract_features(data, idx, row):
 
 
 def fetch_stock(ticker: str):
-    response = requests.get(f"http://127.0.0.1:8000/trades/v1/get/{ticker}")
-    if not response.ok:
-        raise Exception(f"Failed to fetch {ticker}")
-    return response.json()
+    return get_stock_data(ticker)
 
 
-# =========================
-# Main analyze function
-# =========================
 def analyze(target: str, others: list[str]) -> dict:
     all_tickers = [target] + others
     stock_data  = {}
@@ -453,6 +447,8 @@ def calculate_lagged_correlation(stock1: list, stock2: list, lag: int) -> float:
 
 def compare(ticker, ticker_list):
     stock   = get_stock_data(ticker)
+    if not stock:
+        return {"ticker": ticker, "correlations": {}}
     results = {}
 
     for i in ticker_list:
@@ -486,6 +482,10 @@ def get_stock_data(ticker: str, start: str = "2010-01-01", end: str = "2025-01-0
     ticker = ticker.upper()
     os.makedirs("data", exist_ok=True)
     file_path = f"data/{ticker}.csv"
+    session = req_session.Session()
+    session.headers.update({
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+    })
 
     if os.path.exists(file_path):
         print("data in file")
