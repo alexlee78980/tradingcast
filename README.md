@@ -21,12 +21,12 @@ Analyze historical stock data and predict future price movements using machine l
 ### Download
 Download and export historical stock data to a CSV file for offline analysis and research.
  
-![Download Page](screenshots/Download.png)
+![Download Page](screenshots/Download.gif)
  
 ### Correlation
 Measure how closely a stock's daily price changes move in sync with others to identify patterns and build a more diversified portfolio.
  
-![Correlation Page](screenshots/Correlation.png)
+![Correlation Page](screenshots/Correlation.gif)
  
 ---
  
